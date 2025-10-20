@@ -1,0 +1,86 @@
+# chatbot.py
+import random
+import json
+import os
+
+
+# ---------------------------
+# Chatbot Data and Responses
+# ---------------------------
+responses = {
+    "greetings": ["Hello!", "Hi there!", "Hey!", "Namaste!", "Salaam!"],
+    "farewell": ["Goodbye!", "See you later!", "Bye!", "Take care!"],
+    "thanks": ["You're welcome!", "No problem!", "Glad I could help!"],
+    "default": [
+        "I'm not sure I understand. Can you rephrase?",
+        "Hmm, I don't have an answer for that.",
+        "Sorry, I didn't get that. Could you try asking differently?"
+    ]
+}
+
+
+keywords = {
+    "hello": "greetings",
+    "hi": "greetings",
+    "hey": "greetings",
+    "bye": "farewell",
+    "goodbye": "farewell",
+    "thanks": "thanks",
+    "thank you": "thanks"
+}
+
+
+# ---------------------------
+# Helper Functions
+# ---------------------------
+def get_response(user_input):
+    """Return a response based on user input."""
+    user_input = user_input.lower()
+    for key in keywords:
+        if key in user_input:
+            response_category = keywords[key]
+            return random.choice(responses[response_category])
+    # Default response if no keyword matched
+    return random.choice(responses["default"])
+
+
+def chatbot_intro():
+    print("*********************************")
+    print("* Welcome to PyChatBot! *")
+    print("* Type 'exit' to quit anytime *")
+    print("*********************************")
+
+
+# ---------------------------
+# Main Chatbot Loop
+# ---------------------------
+def main():
+    chatbot_intro()
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() in ["exit", "quit"]:
+            print("ChatBot: Goodbye! Have a nice day.")
+            break
+        response = get_response(user_input)
+        print(f"ChatBot: {response}")
+
+
+# ---------------------------
+# Optional: Save Conversation
+# ---------------------------
+def save_conversation(conversation, filename="conversation_log.json"):
+    """Save chat conversation to a JSON file."""
+    if os.path.exists(filename):
+        with open(filename, "r") as file:
+            data = json.load(file)
+    else:
+        data = []
+
+
+    data.append(conversation)
+    with open(filename, "w") as file:
+        json.dump(data, file, indent=4)
+
+
+if __name__ == "__main__":
+    main()

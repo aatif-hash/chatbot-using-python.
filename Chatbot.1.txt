@@ -1,0 +1,58 @@
+# advanced_chatbot.py
+
+
+import random
+
+
+# ---------------------------
+# ChatBot Class
+# ---------------------------
+class ChatBot:
+    def __init__(self, name="PyBot"):
+        self.name = name
+        self.greetings = ["Hello!", "Hi there!", "Hey!", "Namaste!", "Salaam!"]
+        self.farewells = ["Goodbye!", "See you later!", "Bye!", "Take care!"]
+        self.thanks = ["You're welcome!", "No problem!", "Glad I could help!"]
+        self.default = [
+            "Hmm, I'm not sure I understand.",
+            "Could you rephrase that?",
+            "Sorry, I don't have an answer for that."
+        ]
+        self.keywords = {
+            "hello": self.greetings,
+            "hi": self.greetings,
+            "hey": self.greetings,
+            "bye": self.farewells,
+            "goodbye": self.farewells,
+            "thanks": self.thanks,
+            "thank you": self.thanks
+        }
+
+
+    def get_response(self, user_input):
+        """Generate a response based on user input."""
+        user_input = user_input.lower()
+        for key, responses in self.keywords.items():
+            if key in user_input:
+                return random.choice(responses)
+        return random.choice(self.default)
+
+
+    def start_chat(self):
+        """Start the chatbot conversation."""
+        print(f"Welcome! I am {self.name}. Type 'exit' to leave.")
+        while True:
+            user_input = input("You: ")
+            if user_input.lower() in ["exit", "quit"]:
+                print(f"{self.name}: Goodbye! Have a nice day.")
+                break
+            response = self.get_response(user_input)
+            print(f"{self.name}: {response}")
+
+
+# ---------------------------
+# Optional: Running ChatBot
+# ---------------------------
+if __name__ == "__main__":
+    bot = ChatBot("AshpakBot")
+    bot.start_chat()
